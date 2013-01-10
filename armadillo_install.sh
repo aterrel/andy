@@ -35,10 +35,20 @@ rm -rf ${PKG_SRC_DIR}
 
 # Write modulefile
 cat << EOF > ${MODULEFILE}
-local work = os.getenv("WORK")
-local pkg = pathJoin(work, "opt/apps/armadillo/3.6.1")
-local pkg_lib = pathJoin(pkg, "lib")
-local pkg_include = pathJoin(pkg, "include")
+-- -*- lua -*-
+help(
+[[
+This module loads the Armadillo C++ linear algbra library. Updating LIBRARY_PATH, LD_LIBRARY_PATH, and CPLUS_INCLUDE_PATH environment variables.
+]])     
+
+local version = "${VERSION}"
+local base    = "${INSTALL_DIR}"
+
+whatis("Description: Armadillo C++ linear algebra library")
+whatis("URL: http://arma.sourceforge.net/")
+
+local pkg_lib = pathJoin(base, "lib")
+local pkg_include = pathJoin(base, "include")
 prepend_path("LIBRARY_PATH", pkg_lib)
 prepend_path("LD_LIBRARY_PATH", pkg_lib)
 prepend_path("CPLUS_INCLUDE_PATH", pkg_include)
