@@ -30,6 +30,9 @@ make  2>&1 | tee -a ${LOGFILE}
 make install 2>&1 | tee -a ${LOGFILE}
 popd
 
+# Remove source
+rm -rf ${PKG_SRC_DIR}
+
 # Write modulefile
 cat << EOF > ${MODULEFILE}
 local work = os.getenv("WORK")
