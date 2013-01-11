@@ -11,10 +11,11 @@ LOGFILE=${SRC_DIR}/${PKG}-${VERSION}.log
 MODULE_DIR=${ROOT_DIR}/modulefiles/${PKG}
 MODULEFILE=${MODULE_DIR}/${VERSION}.lua
 
-# Remove previous source and unpack tarball
+# Update development direcotry or download it
 if [ -d ${PKG_SRC_DIR} ]; then
     pushd ${PKG_SRC_DIR}
     git pull
+    popd
 else 
     git clone git@bitbucket.org:donnaaboise/forestclaw.git
 fi

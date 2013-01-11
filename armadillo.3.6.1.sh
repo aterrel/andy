@@ -8,7 +8,8 @@ INSTALL_DIR=${ROOT_DIR}/apps/${PKG}/${VERSION}
 PKG_SRC_DIR=${SRC_DIR}/${PKG}-${VERSION}
 TARBALL=${SRC_DIR}/${PKG}-${VERSION}.tar.gz
 LOGFILE=${SRC_DIR}/${PKG}-${VERSION}.log
-MODULEFILE=${ROOT_DIR}/modulefiles/${PKG}/${VERSION}.lua
+MODULE_DIR=${ROOT_DIR}/modulefiles/${PKG}
+MODULEFILE=${MODULE_DIR}/${VERSION}.lua
 MKL_LIB_DIR=${MKLROOT}/lib/intel64
 
 # Remove previous source and unpack tarball
@@ -34,6 +35,7 @@ popd
 rm -rf ${PKG_SRC_DIR}
 
 # Write modulefile
+mkdir -p ${MODULE_DIR}
 cat << EOF > ${MODULEFILE}
 -- -*- lua -*-
 help(
