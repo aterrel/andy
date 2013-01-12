@@ -53,4 +53,6 @@ prepend_path("LD_LIBRARY_PATH", pkg_lib)
 prepend_path("CPLUS_INCLUDE_PATH", pkg_include)
 prepend_path("C_INCLUDE_PATH", pkg_include)
 prepend_path("MANPATH", pkg_man)
+
+setenv("ICU_DIR", base)
 EOF
