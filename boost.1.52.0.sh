@@ -12,21 +12,26 @@ MODULE_DIR=${ROOT_DIR}/modulefiles/${PKG}
 MODULEFILE=${MODULE_DIR}/${VERSION}.lua
 MKL_LIB_DIR=${MKLROOT}/lib/intel64
 
-# # Remove previous source and unpack tarball
-#rm -rf ${PKG_SRC_DIR}
-#tar -xzf ${TARBALL}
+# Remove previous source and unpack tarball
+rm -rf ${PKG_SRC_DIR}
+tar -xzf ${TARBALL}
+
+
+
 
 # # Configure and make
 pushd ${PKG_SRC_DIR}
-./bootstrap.sh 2>&1 | tee ${LOGFILE}
-./b2 --prefix=${INSTALL_DIR} \
-     --toolset=intel-linux \
-     2>&1 | tee -a ${LOGFILE}
-./b2 install | tee -a ${LOGFILE}
+module load icu
+./bootstrap.sh --prefix=${INSTALL_DIR} \
+               --with-toolset=intel-linux \
+               --with-icu=${ICU_DIR} \
+               2>&1 | tee ${LOGFILE}
+echo "using mpi ;" >> tools/build/v2/user-config.jam
+./b2 install 2>&1 | tee -a ${LOGFILE}
 popd
 
 # Remove source
-#rm -rf ${PKG_SRC_DIR}
+rm -rf ${PKG_SRC_DIR}
 
 # Write modulefile
 mkdir -p ${MODULE_DIR}
@@ -53,5 +58,7 @@ setenv("BOOST_INC","${INSTALL_DIR}/include")
 
 -- Add boost to the LD_LIBRARY_PATH
 prepend_path("LD_LIBRARY_PATH","${INSTALL_DIR}/lib")
+prepend_path("LIBRARY_PATH", "${INSTALL_DIR}/lib")
+prepend_path("CPLUS_INCLUDE_PATH", "${INSTALL_DIR}/include")
 
 EOF
