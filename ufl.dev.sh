@@ -43,7 +43,7 @@ local base    = "${INSTALL_DIR}"
 whatis("Description: UFL python library")
 whatis("URL: https://launchpad.net/ufl")
 
-prereq("python",)
+prereq("python")
 
 local pkg_path = pathJoin(base, "bin")
 local pkg_man = pathJoin(base, "share/man")
