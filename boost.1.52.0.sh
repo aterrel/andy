@@ -13,8 +13,8 @@ MODULEFILE=${MODULE_DIR}/${VERSION}.lua
 MKL_LIB_DIR=${MKLROOT}/lib/intel64
 
 # # Remove previous source and unpack tarball
-rm -rf ${PKG_SRC_DIR}
-tar -xzf ${TARBALL}
+#rm -rf ${PKG_SRC_DIR}
+#tar -xzf ${TARBALL}
 
 # # Configure and make
 pushd ${PKG_SRC_DIR}
@@ -22,10 +22,11 @@ pushd ${PKG_SRC_DIR}
 ./b2 --prefix=${INSTALL_DIR} \
      --toolset=intel-linux \
      2>&1 | tee -a ${LOGFILE}
+./b2 install | tee -a ${LOGFILE}
 popd
 
 # Remove source
-rm -rf ${PKG_SRC_DIR}
+#rm -rf ${PKG_SRC_DIR}
 
 # Write modulefile
 mkdir -p ${MODULE_DIR}
