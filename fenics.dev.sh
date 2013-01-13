@@ -30,7 +30,10 @@ load("python",
      "petsc/3.3-cxx",
      "slepc/3.3-cxx",
      "pmetis",
-     "ScientificPython")
+     "ScientificPython",
+     "gmp",
+     "mpfr",
+     "CGAL")
 
 -- FEniCS Packages
 load("ufl",
