@@ -43,7 +43,7 @@ help(
 [[
 This module loads the GMP library.
 
-Updating LIBRARY_PATH, LD_LIBRARY_PATH, and CPLUS_INCLUDE_PATH environment variables.
+Updating LIBRARY_PATH, LD_LIBRARY_PATH, and CPLUS_INCLUDE_PATH environment variables. Sets GMP_DIR environment variable.
 ]])     
 
 local version = "${VERSION}"
@@ -58,4 +58,6 @@ prepend_path("LIBRARY_PATH", pkg_lib)
 prepend_path("LD_LIBRARY_PATH", pkg_lib)
 prepend_path("CPLUS_INCLUDE_PATH", pkg_include)
 prepend_path("C_INCLUDE_PATH", pkg_include)
+
+setenv("GMP_DIR", base)
 EOF
