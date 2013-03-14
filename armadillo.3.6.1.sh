@@ -54,4 +54,6 @@ local pkg_include = pathJoin(base, "include")
 prepend_path("LIBRARY_PATH", pkg_lib)
 prepend_path("LD_LIBRARY_PATH", pkg_lib)
 prepend_path("CPLUS_INCLUDE_PATH", pkg_include)
+
+setenv("ARMADILLO_DIR", base)
 EOF

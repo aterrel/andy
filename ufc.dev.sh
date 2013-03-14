@@ -1,5 +1,7 @@
 #/bin/bash
 
+set -e 
+
 PKG=ufc
 VERSION=dev
 ROOT_DIR=${WORK}/opt
@@ -13,13 +15,13 @@ MODULE_DIR=${ROOT_DIR}/modulefiles/${PKG}
 MODULEFILE=${MODULE_DIR}/${VERSION}.lua
 
 # Update development direcotry or download it
-# if [ -d ${PKG_SRC_DIR} ]; then
-#     pushd ${PKG_SRC_DIR}
-#     bzr pull
-#     popd
-# else 
-#     bzr branch lp:${PKG}
-# fi
+if [ -d ${PKG_SRC_DIR} ]; then
+    pushd ${PKG_SRC_DIR}
+    bzr pull
+    popd
+else 
+    bzr branch lp:${PKG}
+fi
 
 # Configure and make
 rm -rf ${BUILD_DIR}
@@ -29,18 +31,25 @@ echo "cmake -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} \
       -DCMAKE_CXX_COMPILER=${ICC_BIN}/icpc \
       -DCMAKE_C_COMPILER=${ICC_BIN}/icc \
       -DCMAKE_BUILD_TYPE=Release \
-      -DUFC_INSTALL_PYTHON_EXT_DIR= ${PY_INSTALL_DIR} \
-      -DUFC_INSTALL_PYTHON_MODULE_DIR= ${PY_INSTALL_DIR} \      
+      -DCMAKE_VERBOSE_MAKEFILE=ON \
+      -DBoost_INCLUDE_DIR=${BOOST_DIR}/include/boost \
+      -DPYTHON_EXECUTABLE=${TACC_PYTHON_DIR}/bin/python \
+      -DPYTHON_INCLUDE_PATH=${TACC_PYTHON_DIR}/include/python2.7 \
+      -DUFC_INSTALL_PYTHON_EXT_DIR=${PY_INSTALL_DIR} \
+      -DUFC_INSTALL_PYTHON_MODULE_DIR=${PY_INSTALL_DIR} \
       .." 2>&1 | tee ${LOGFILE}
 
 cmake -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} \
       -DCMAKE_CXX_COMPILER=${ICC_BIN}/icpc \
       -DCMAKE_C_COMPILER=${ICC_BIN}/icc \
       -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_VERBOSE_MAKEFILE=ON \
+      -DBoost_INCLUDE_DIR=${BOOST_DIR}/include \
       -DPYTHON_EXECUTABLE=${TACC_PYTHON_DIR}/bin/python \
+      -DPYTHON_INCLUDE_PATH=${TACC_PYTHON_DIR}/include/python2.7 \
       -DUFC_INSTALL_PYTHON_EXT_DIR=${PY_INSTALL_DIR} \
       -DUFC_INSTALL_PYTHON_MODULE_DIR=${PY_INSTALL_DIR} \
-      .. 2>&1 | tee ${LOGFILE}
+      .. 2>&1 | tee -a ${LOGFILE}
 make  2>&1 | tee -a ${LOGFILE}
 make install 2>&1 | tee -a ${LOGFILE}
 popd

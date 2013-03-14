@@ -1,5 +1,7 @@
 #/bin/bash
 
+set -e
+
 PKG=ufl
 VERSION=dev
 ROOT_DIR=${WORK}/opt
