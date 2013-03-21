@@ -28,6 +28,7 @@ MODULE_DIR=${ROOT_DIR}/modulefiles/${PKG}
 MODULEFILE=${MODULE_DIR}/${VERSION}.lua
 MKL_LIB_DIR=${MKLROOT}/lib/intel64
 
+mkdir -p ${SRC_DIR}/logs
 echo "Starting build: `date`" | tee ${LOGFILE}
 # Remove previous source and unpack tarball
 if [ ! -f ${TARBALL} ]; then
