@@ -1,0 +1,14 @@
+Andy's install scripts for TACC Resources (and ICES now)
+
+Usage
+-----
+
+export WORK=/workspace # or whereever
+mkdir -p $WORK/opt/src
+mv install_script $WORK/opt/src
+cd $WORK/opt/src
+
+./install_script/<prog>
+
+module use $WORK/opt/modulefiles
+module load <prog>
