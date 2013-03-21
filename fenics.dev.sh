@@ -46,7 +46,9 @@ load("python",
      "cmake",
      "phdf5",
      "mkl",
-     "scotch")
+     "scotch",
+     "gccxml",
+     "libadjoint")
 
 
 prepend_path("CPLUS_INCLUDE_PATH", os.getenv("TACC_HDF5_INC"))
@@ -62,4 +64,7 @@ load("ufl",
      "ffc",
      "instant",
      "dolfin")
+
+-- FEniCS Applications
+load("dolfin-adjoint")
 EOF
