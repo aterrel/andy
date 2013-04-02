@@ -2,16 +2,6 @@
 
 set -e
 
-function echo_and_run { 
-    echo "\$ $@" | tee -a $LOGFILE
-    "$@" 2>&1 | tee -a $LOGFILE
-    status=${PIPESTATUS[0]}
-    if [ $status -ne 0 ]; then
-        echo "error with $1"
-    fi
-    return $status
-}
-
 PKG=anaconda
 VERSION=1.4.0
 URL=https://store.continuum.io/cshop/anaconda
@@ -21,13 +11,16 @@ ROOT_DIR=${WORK}/opt
 SRC_DIR=${ROOT_DIR}/src
 INSTALL_DIR=${ROOT_DIR}/apps/${PKG}/${VERSION}
 BUILD_DIR=${PKG_SRC_DIR}/build/release
-TARBALL=${SRC_DIR}/Anaconda-${VERSION}-Linux-x86_64.sh
+TARBALL=${SRC_DIR}/tarball/Anaconda-${VERSION}-Linux-x86_64.sh
 LOGFILE=${SRC_DIR}/logs/${PKG}-${VERSION}.log
 MODULE_DIR=${ROOT_DIR}/modulefiles/${PKG}
 MODULEFILE=${MODULE_DIR}/${VERSION}.lua
 
+source ${SRC_DIR}/install_scripts/functions.sh
+
+if_done_exit
+start_build
 mkdir -p ${SRC_DIR}/logs
-echo "Starting build: `date`" | tee ${LOGFILE}
 # Remove previous source and unpack tarball
 if [ ! -f ${TARBALL} ]; then
     echo_and_run wget ${DOWNLOAD_URL}
@@ -59,4 +52,4 @@ prepend_path("PATH", pkg_bin)
 setenv("${PKG^^}_DIR", base)
 EOF
 
-echo "Finishing build: `date`" | tee -a ${LOGFILE}
+finish_build

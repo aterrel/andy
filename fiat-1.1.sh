@@ -1,10 +1,10 @@
 #/bin/bash
 
-PKG=ScientificPython
-VERSION=2.9.2
-DESCRIPTION="A collection of Python modules for scientific computing. It contains support for geometry, mathematical functions, statistics, physical units, IO, visualization, and parallelization."
-URL=https://sourcesup.renater.fr/projects/scientific-py/
-DOWNLOAD_URL=https://sourcesup.renater.fr/frs/download.php/4153/ScientificPython-2.9.2.tar.gz
+PKG=fiat
+VERSION=1.1
+DESCRIPTION="The FInite element Automatic Tabulator FIAT supports generation of arbitrary order instances of the Lagrange elements on lines, triangles, and tetrahedra. It is also capable of generating arbitrary order instances of Jacobi-type quadrature rules on the same element shapes."
+URL=http://fenicsproject.org/
+DOWNLOAD_URL=https://launchpad.net/fiat/1.1.x/release-1.1/+download/fiat-1.1.tar.gz
 
 . install_scripts/incl.sh
 
@@ -18,7 +18,7 @@ echo_and_run tar -xzf ${TARBALL}
 
 # Configure and make
 pushd ${PKG_SRC_DIR}
-module load anaconda
+module load anaconda ScientificPython ufc swig fiat
 echo_and_run python setup.py install --prefix=${INSTALL_DIR}
 popd
 
@@ -29,6 +29,9 @@ cat << EOF > ${MODULEFILE}
 help(
 [[
 This module loads the ${PKG} python library
+
+${DESCRIPTION}
+
 It updates the PYTHONPATH environment variable.
 
 Requires a python module be loaded.
@@ -42,7 +45,7 @@ local base    = "${INSTALL_DIR}"
 whatis("Description: ${DESCRIPTION}")
 whatis("URL: ${URL}")
 
-prereq("python")
+prereq("python", "ScientificPython")
 
 local pkg_py = pathJoin(base, "lib/python2.7/site-packages")
 prepend_path("PYTHONPATH", pkg_py)

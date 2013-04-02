@@ -1,10 +1,10 @@
 #/bin/bash
 
-PKG=ScientificPython
-VERSION=2.9.2
-DESCRIPTION="A collection of Python modules for scientific computing. It contains support for geometry, mathematical functions, statistics, physical units, IO, visualization, and parallelization."
-URL=https://sourcesup.renater.fr/projects/scientific-py/
-DOWNLOAD_URL=https://sourcesup.renater.fr/frs/download.php/4153/ScientificPython-2.9.2.tar.gz
+PKG=ffc
+VERSION=1.2.0
+DESCRIPTION="a compiler for multilinear forms by generating code (C++) for the evaluation of a multilinear form given in mathematical notation"
+URL=http://fenicsproject.org/
+DOWNLOAD_URL=https://launchpad.net/ffc/1.2.x/1.2.0/+download/ffc-1.2.0.tar.gz
 
 . install_scripts/incl.sh
 
@@ -18,7 +18,7 @@ echo_and_run tar -xzf ${TARBALL}
 
 # Configure and make
 pushd ${PKG_SRC_DIR}
-module load anaconda
+module load anaconda ScientificPython ufc swig fiat
 echo_and_run python setup.py install --prefix=${INSTALL_DIR}
 popd
 
@@ -29,6 +29,9 @@ cat << EOF > ${MODULEFILE}
 help(
 [[
 This module loads the ${PKG} python library
+
+${DESCRIPTION}
+
 It updates the PYTHONPATH environment variable.
 
 Requires a python module be loaded.
@@ -42,9 +45,14 @@ local base    = "${INSTALL_DIR}"
 whatis("Description: ${DESCRIPTION}")
 whatis("URL: ${URL}")
 
-prereq("python")
+prereq("python", "fiat", "ufl")
 
+local pkg_path = pathJoin(base, "bin")
+local pkg_man = pathJoin(base, "share/man")
 local pkg_py = pathJoin(base, "lib/python2.7/site-packages")
+
+prepend_path("PATH", pkg_path)
+prepend_path("MANPATH", pkg_man)
 prepend_path("PYTHONPATH", pkg_py)
 EOF
 
