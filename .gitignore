@@ -1,3 +1,6 @@
 *.log
 *.tar.gz
 *~
+
+packages.sh
+config.sh
