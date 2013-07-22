@@ -1,0 +1,70 @@
+#!/bin/bash
+
+set -e
+
+
+function on_error() {
+  local parent_lineno="$1"
+  local message="$2"
+  local code="${3:-1}"
+  if [[ -n "$message" ]] ; then
+    echo "Error on or near line ${parent_lineno}: ${message}; exiting with status ${code}"
+  else
+    echo "Error on or near line ${parent_lineno}; exiting with status ${code}"
+  fi
+  echo "Send http://foaas.herokuapp.com/linus/Andy/<your-name> to Andy now!"
+  exit "${code}"
+}
+trap 'on_error ${LINENO}' ERR
+
+on_exit(){
+    echo "Andy is happy to be of service!"
+}
+
+trap on_exit EXIT
+
+
+source conf.sh
+source toolchain.sh 
+source $ANDY_ROOT_DIR/util/functions.sh
+ANDY_LOG_DIR=${ANDY_ROOT_DIR}/logs
+CURR_LOG=${ANDY_LOG_DIR}/current.log
+
+if [ ! -d `dirname $CURR_LOG` ]; then
+    mkdir `dirname $CURR_LOG`
+fi
+
+exec > >(tee -a $CURR_LOG)
+
+exec 2>&1
+
+echo "[`date`] $@" >> ${ANDY_ROOT_DIR}/logs/current.log
+
+not_implemented() {
+    echo  "Not implemented!"
+    exit 2
+}
+
+install_package() {
+    not_implemented
+}
+
+install_script() {
+    ./$1
+}
+
+pass_through() {
+    exec $@
+}
+
+if [ $# -eq 0 ]; then
+    echo "Welcome sir! How may I be of assistance"
+elif [ $1 == "package" ]; then
+    install_package $2
+elif [ $1 == "script" ]; then
+    install_script $2
+elif [ $1 == "working" ]; then
+    :
+else
+    pass_through $@
+fi
