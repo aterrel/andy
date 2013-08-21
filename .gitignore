@@ -4,3 +4,5 @@
 
 packages.sh
 config.sh
+.cproject
+.project

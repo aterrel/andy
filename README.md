@@ -1,5 +1,5 @@
-Andy's Sanity Scripts of Keeping Installs Simple and Stupid
-===========================================================
+Andy
+====
 
 These scripts are meant to keep [Andy][0] sane as he moves from computer to
 computer.  The intention is to create a set of lightweight bash
@@ -33,7 +33,7 @@ copy one from machine files and include it in your top dir.
     $ ./andy_install package packages/plist.default.sh
     $ ./andy_install script scripts/<script_name>.sh
 
-5. [NOT IMPLEMENTED] When things break ask to fix shit and you will be
+5. [NOT IMPLEMENTED] When things break ask to fix it and you will be
 taken to the last place things were installed at.
     $ ./andy_install debug
 
