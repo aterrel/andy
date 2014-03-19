@@ -1,0 +1,164 @@
+#!/bin/bash
+
+# Environment path manipulation based on info at 
+#    http://stackoverflow.com/questions/370047/what-is-the-most-elegant-way-to-remove-a-path-from-the-path-variable-in-bash
+# whose solution was:
+#    path_append ()  { path_remove $1; export PATH="$PATH:$1"; }
+#    path_prepend () { path_remove $1; export PATH="$1:$PATH"; }
+#    path_remove ()  { export PATH=`echo -n $PATH | awk -v RS=: -v ORS=: '$0 != "'$1'"' | sed 's/:$//'`; }
+
+# Generic versions of above functions
+#  Note that the full path to printenv seems to be necessary for Darwin since 
+#  the path to printenv is not yet in the path
+var_append () {
+    # Check to see if the variable exists
+    if [ -z "${1}" ]; then
+        export ${1}="${2}"
+    else
+        var_remove $1 $2
+        export ${1}="`/usr/bin/printenv $1`:${2}"
+    fi
+}
+var_prepend () {
+    # Check to see if variable exists
+    if [ -z "${1}" ]; then
+        export ${1}="${2}"
+    else
+        var_remove $1 $2
+        export ${1}="${2}:`/usr/bin/printenv $1`"
+    fi
+}
+var_remove () {
+    VAR_CONTENTS=`/usr/bin/printenv $1`
+    NEW_VAR=`echo -n $VAR_CONTENTS | awk -v RS=: -v ORS=: '$0 != "'$2'"' | sed 's/:$//'`
+    export ${1}=${NEW_VAR}
+} 
+
+# Convenience functions for particular variables
+path_append () { var_append PATH $1; }
+path_prepend () { var_prepend PATH $1; }
+path_remove () { var_remove PATH $1; }
+
+dyld_append () { var_append DYLD_LIBRARY_PATH $1;}
+dyld_prepend () { var_prepend DYLD_LIBRARY_PATH $1;}
+dyld_remove () { var_remove DYLD_LIBRARY_PATH $1;}
+
+python_append () { var_append PYTHONPATH $1;}
+python_prepend () { var_prepend PYTHONPATH $1;}
+python_remove () { var_remove PYTHONPATH $1;}  
+
+
+
+
+function win-divider {
+  s="_"
+  o=""
+  let nl=$COLUMNS
+
+  for i in `seq 1 $nl`; do o="${o}${s}"; done
+  echo $o
+}
+
+# Set development
+function set_devel {
+
+    # Compiler specific flags and settings
+    case "$1" in
+        intel)
+            export FC=ifort
+            export CC=icc
+            export CXX=icpc
+            export INCLUDE=
+            export INTEL_PATH=/opt/intel/Compiler/11.1/089
+            source $INTEL_PATH/bin/ifortvars.sh intel64
+            source $INTEL_PATH/bin/iccvars.sh intel64
+            dyld_prepend $LIBRARY_PATH
+            export OMP_FLAG=-openmp
+            #export DYLD_LIBRARY_PATH=$LIBRARY_PATH:${DYLD_LIBRARY_PATH}
+            if [ $2 = "debug" ]; then
+                # Not sure exactly what this does
+                # export FFLAGS="-debug all"
+                export FFLAGS="-g -check all -traceback -fpe0"
+                # Removed -gen_interfaces because of too many files!
+                # export FFLAGS="-g -check all -warn all,nodec,interfaces -gen_interfaces -traceback -fpe0"
+            elif [ $2 = "opt" ]; then
+                # -fast = -ipo -O3 -no-prec-div -static
+                # -ipo and -parallel seem to cause weird things occasionally!
+                export FFLAGS="-O2 -ip"
+            else
+                echo "ERROR: Must provide devel level, either debug or opt"
+            fi
+            ;;
+        gcc)
+            export FC=gfortran
+            export CC=gcc
+            export CXX=g++
+            export INCLUDE=
+            export OMP_FLAG=-fopenmp
+            dyld_remove 
+            # export DYLD_LIBRARY_PATH=
+            if [ $2 = "debug" ]; then          
+                # -fcheck=all <- Does not seem to work on gfortran 4.4.6  
+                export FFLAGS="-W -Wall -fbounds-check -pedantic-errors -Wunderflow -ffpe-trap=invalid,zero,overflow -g"
+            elif [ $2 = "opt" ]; then
+                # openmp does not seem to work for some odd reason, must look into this
+                export FFLAGS="-O3 -funroll-loops -finline-functions" #-fdefault-real-8
+            else
+                echo "ERROR: Must provide devel level, either debug or opt"
+            fi
+            ;;
+        *)
+            echo "ERROR: Must provide compiler type, either intel or gcc"
+            ;;
+    esac
+    # Set additional variants of the fortran compiler env variables
+    export F77=${FC}
+    export G77=${FC}
+    export F90=${FC}
+    export F95=${FC}
+    
+    # Development level options, non-compiler specific
+    export DEV_LEVEL="$2"
+    case "$2" in
+        debug)
+            dyld_prepend /Users/mandli/src/lib
+            #export DYLD_LIBRARY_PATH=/Users/mandli/src/lib:$DYLD_LIBRARY_PATH
+            set_omp 1
+            ;;
+        opt)
+            set_omp 4
+            ;;
+        *)
+            echo "ERROR: Must provide devel level, either debug or opt"
+            ;;
+    esac
+
+    if [ $# -eq 3 ]; then
+        if [ $3 = "omp" ]; then
+            export FFLAGS="$FFLAGS $OMP_FLAG"
+        fi
+    fi
+}
+
+# Set OMP flag
+function omp {
+    printenv OMP_NUM_THREADS
+}
+function set_omp {
+    export OMP_NUM_THREADS=$1
+}
+
+# Quit an OS X application cleanly from command line
+quit () {
+    for app in $*; do
+        osascript -e 'quit app "'$app'"'
+    done
+}
+# Relaunch an app from the command line
+relaunch () {
+    for app in $*; do
+        osascript -e 'quit app "'$app'"';
+        sleep 2;
+        open -a $app
+    done
+}

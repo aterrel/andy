@@ -1,0 +1,89 @@
+# Adding Brew to path
+export PATH=/usr/local/bin:$PATH
+
+# Adding MacTeX to path
+export PATH=/usr/local/texlive//2013/bin/x86_64-darwin/:$PATH
+
+# Git completeion and prompt
+source $HOME/.git-completion.sh
+export GIT_PS1_SHOWDIRTYSTATE=1
+export GIT_PS1_SHOWSTASHSTATE=1
+
+# Add TextMate mate command
+alias mate=/Applications/TextMate.app/Contents/Resources/mate
+
+# Add SourceTree command
+alias stree=/Applications/SourceTree.app/Contents/Resources/stree
+
+source $HOME/.bash_functions
+# Set the prompt
+export CLICOLOR=1
+
+win-divider() {
+    s="_"
+    o=""
+    let nl=$COLUMNS
+    for i in `seq 1 $nl`; do o="${o}${s}"; done
+    echo $o
+}
+
+TBytes() {
+    TBytes=0
+    for Bytes in $(ls -l | grep "^-" | awk '{ print $5 }')
+    do
+        let TBytes=$TBytes+$Bytes
+    done
+    TotalMeg=$(echo -e "scale=3 \n$TBytes/1048576 \nquit" | bc)
+    echo -n "$TotalMeg"
+}
+
+prompt-color-git() {
+    export PS1="\[\e[1m\]\$(win-divider)\n| \[\e[1;30;47m\]\[\e[1;30;31m\][\$(date +%m-%d\" \"%H:%M)] \[\e[1;30;34m\]\u\[\e[1;30;31m\]@\[\e[1;30;32m\]\h\[\e[1;30;47m\]:\[\e[1;30;34m\]\w \[\e[1;30;47m\](\[\e[1;30;36m\]\$(TBytes) Mb\[\e[1;30;47m\])\$(__git_ps1 \" (%s)\")\[\e[0m\]\n\$ "
+}
+
+prompt-color-nogit() {
+    export PS1="\[\e[1m\]\$(win-divider)\n| \[\e[1;30;47m\]\[\e[1;30;31m\][\$(date +%m-%d\" \"%H:%M)] \[\e[1;30;34m\]\u\[\e[1;30;31m\]@\[\e[1;30;32m\]\h\[\e[1;30;47m\]:\[\e[1;30;34m\]\w \[\e[1;30;47m\](\[\e[1;30;36m\]\$(TBytes) Mb\[\e[1;30;47m\]) \[\e[0m\]\n\$ "
+}
+
+prompt-nocolor-git() {
+    export PS1="\$(win-divider)\n| [\$(date +%m-%d\" \"%H:%M)] \u@\h:\w (\$(TBytes) Mb)\$(__git_ps1 \" (%s)\") \n\$ "
+}
+
+prompt-nocolor-nogit() {
+    export PS1="\$(win-divider)\n| [\$(date +%m-%d\" \"%H:%M)] \u@\h:\w (\$(TBytes) Mb) \n\$ "
+}
+
+prompt-nocolor-git
+
+# Aliases
+alias space='du -a | sort -nr > space.txt'
+alias enscript='enscript -2jrGE'
+alias back='cd $OLDPWD'
+
+export CVS_RSH=ssh
+export EDITOR='vi'
+
+export git_gmail_cmd="--from andy.terrel@gmail.com --smtp-encryption ssl --smtp-user andy.terrel --smtp-server smtp.gmail.com"
+alias git-email-me="git send-email --to andy.terrel@gmail.com $git_gmail_cmd"
+alias git-email-sympy="git send-email --to sympy-patches@googlegroups.com $git_gmail_cmd"
+
+# pip bash completion start
+_pip_completion()
+{
+    COMPREPLY=( $( COMP_WORDS="${COMP_WORDS[*]}" \
+                   COMP_CWORD=$COMP_CWORD \
+                   PIP_AUTO_COMPLETE=1 $1 ) )
+}
+complete -o default -F _pip_completion pip
+# pip bash completion end
+
+export WORK=$HOME/workspace
+alias cdw="cd $WORK"
+
+source /Users/aterrel/workspace/opt/apps/Lmod/5.2/lmod/lmod/init/bash
+module use $WORK/opt/modulefiles
+module load anaconda libdynd dynd-python blz datashape blaze 
+module load andy
+
+alias blaze_test='(pushd $BLAZE_DIR; python setup.py install --prefix=$PWD; cd ../; python -c "import blaze; blaze.test()"; popd)'
+
