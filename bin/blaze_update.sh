@@ -7,12 +7,12 @@ set -e
 source git_functions.sh
 
 WORK=${HOME}/workspace
-APPS=${WORK}/opt/apps
+APPS=${WORK}/apps
 
 BLAZE_REPOS="libdynd dynd-python blz datashape blaze"
 GITHUB_ORG=ContinuumIO
 GITHUB_USER=aterrel
-GITHUB_TEAM="mwiebe FrancescAlted ${GITHUB_ORG}"
+GITHUB_TEAM="mwiebe mrocklin talumbau ${GITHUB_ORG}"
 
 get_repo_dir(){
     echo ${APPS}/$1/$1-dev
@@ -112,11 +112,10 @@ build_blaze(){
     repo=blaze
     repo_dir=`get_repo_dir ${repo}`
     cd ${repo_dir}
-    git clean -fdx
     python setup.py install --prefix=${PWD}
 }
 
-build(){
+build_blaze_stack(){
     build_libdynd
     build_dynd_python
     build_blz
@@ -124,6 +123,6 @@ build(){
     build_blaze
 }
 
-#git_clone_repos
-git_update_repos
-build
+#   git_clone_repos
+#git_update_repos
+build_blaze_stack
