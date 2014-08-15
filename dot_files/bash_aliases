@@ -1,0 +1,47 @@
+# Aliases Commands
+alias space='du -a | sort -nr > space.txt'
+alias enscript='enscript -2jrGE'
+alias back='cd $OLDPWD'
+alias mate=/Applications/TextMate.app/Contents/Resources/mate
+alias stree="/Applications/SourceTree.app/Contents/Resources/stree '$(git rev-parse --show-toplevel)'"
+alias blaze_test='(pushd $BLAZE_DIR; python setup.py install; nosetests --with-doctest blaze/expr blaze/compute blaze/data; popd)'
+
+
+# SSH Aliases
+alias nopass_ssh="(cp ~/.ssh/id_rsa_nopass ~/.ssh/id_rsa; cp ~/.ssh/id_rsa_nopass.pub ~/.ssh/id_rsa.pub)"
+alias pass_ssh="(cp ~/.ssh/id_rsa_pass ~/.ssh/id_rsa; cp ~/.ssh/id_rsa_pass.pub ~/.ssh/id_rsa.pub)"
+
+alias ssh_canon='nopass_ssh; ssh aterrel@canon.cs.utexas.edu'
+alias ssh_lilac='nopass_ssh; ssh aterrel@lilac.cs.uchicago.edu'
+alias ssh_idefix='nopass_ssh; ssh aterrel@idefix.uchicago.edu'
+alias ssh_fledermaus='nopass_ssh; ssh aterrel@fledermaus-1.cs.uchicago.edu'
+alias ssh_fenics-apps='nopass_ssh; ssh fenics-apps@fenics.org'
+alias ssh_fenics='nopass_ssh; ssh fenics@fenics.org'
+alias ssh_athanasius='nopass_ssh; ssh aterrel@athanasius.math.ttu.edu'
+alias ssh_spudhammer='nopass_ssh; ssh p5c9b@spudhammer.phys.ttu.edu'
+alias ssh_mcs='pass_ssh; ssh aterrel@login.mcs.anl.gov'
+alias ssh_lovett='nopass_ssh; ssh aterrel@lovett.tacc.utexas.edu'
+
+alias ssh_lonestar='nopass_ssh; ssh aterrel@lonestar.tacc.utexas.edu'
+alias ssh_ranger='nopass_ssh; ssh aterrel@ranger.tacc.utexas.edu'
+
+alias ssh_uiuc_gpu='nopass_ssh; ssh gpu108@ac.ncsa.uiuc.edu'
+alias ssh_sympy="ssh aterrel@li21-74.members.linode.com"
+
+alias ssh_scipy_conf="ssh -i ~/.ssh/conference.scipy.org.pem aterrel@conference.scipy.org"
+alias tunnel_scipy_conf="ssh -i ~/.ssh/conference.scipy.org.pem -f -N -L localhost:8000:conference.scipy.org:8000 conference.scipy.org"
+
+
+# GMAIL GIT command
+export git_gmail_cmd="--from andy.terrel@gmail.com --smtp-encryption ssl --smtp-user andy.terrel --smtp-server smtp.gmail.com"
+alias git-email-me="git send-email --to andy.terrel@gmail.com $git_gmail_cmd"
+alias git-email-sympy="git send-email --to sympy-patches@googlegroups.com $git_gmail_cmd"
+
+alias mongod_run="mongod --config /usr/local/etc/mongod.conf"
+alias pycharm=/Applications/PyCharm.app/Contents/MacOS/pycharm
+alias pyserve="python -m SimpleHTTPServer"
+alias "ssh_sparkly=ssh -A -i ~/.ssh/sparkly_keys.rsa root@ec2-54-197-111-122.compute-1.amazonaws.com"
+
+# Web scraping
+## Call like so: scrap mydomain.com subdomain.mydomain.com/path/to/page
+alias scrap="wget --recursive --no-clobber --page-requisites --html-extension --convert-links --restrict-file-names=windows --no-parent --domains"
