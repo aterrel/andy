@@ -1,12 +1,8 @@
 #!/bin/bash
 
-WORK=${HOME}/work
-ANDY_ROOT_DIR=${WORK}/andy
-ANDY_INSTALL_DIR=${ANDY_ROOT_DIR}/install
-ROOT_DIR=${ANDY_INSTALL_ROOT_DIR}
-SRC_DIR=${ROOT_DIR}/src
-INSTALL_DIR=${ROOT_DIR}/apps/${PKG}/${VERSION}
-PKG_SRC_DIR=${SRC_DIR}/${PKG}-${VERSION}
-TARBALL=${SRC_DIR}/tarballs/${PKG}-${VERSION}.tar.gz
-LOGFILE=${SRC_DIR}/logs/${PKG}-${VERSION}.log
+WORK=${HOME}/workspace
+ANDY_INSTALL_DIR=${WORK}/apps
+ANDY_SRC_DIR=${WORK}/src
+ANDY_LOG_DIR=${WORK}/logs
+ANDY_MODULE_DIR=${WORK}/modulefiles
 

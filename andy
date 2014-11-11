@@ -49,8 +49,8 @@ if [ ! -d "${ANDY_DIR}" ]; then
   popd
 fi
 
-source conf.sh
-source toolchain.sh 
+source ${ANDY_DIR}/conf.sh
+source ${ANDY_DIR}/toolchain.sh
 source $ANDY_ROOT_DIR/util/functions.sh
 ANDY_LOG_DIR=${ANDY_ROOT_DIR}/logs
 CURR_LOG=${ANDY_LOG_DIR}/current.log
