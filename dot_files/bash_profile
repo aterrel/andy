@@ -6,20 +6,15 @@ export PATH=/usr/local/bin:$PATH
 source ${HOME}/.bash_functions
 source ${HOME}/.bash_aliases
 
-# Adding MacTeX to path
-export PATH=/usr/local/texlive//2013/bin/x86_64-darwin/:$PATH
 export CVS_RSH=ssh
 export WORK=$HOME/workspace
 alias cdw="cd $WORK"
 
+# Anaconda 2.1.0 5
+export PATH="/Users/aterrel/workspace/apps/anaconda/py3/bin:$PATH"
+
 # Add Java home
 export JAVA_HOME=$(/usr/libexec/java_home)
-
-# Adding module files
-source /Users/aterrel/workspace/apps/Lmod/5.2/lmod/lmod/init/bash
-module use $WORK/modulefiles
-module load anaconda libdynd dynd-python blz datashape blaze 
-module load andy
 
 # Path to the bash it configuration
 export BASH_IT=$HOME/.bash_it
@@ -53,12 +48,4 @@ export TODO="t"
 
 # Load Bash It
 source $BASH_IT/bash_it.sh
-
-##
-# Your previous /Users/aterrel/.bash_profile file was backed up as /Users/aterrel/.bash_profile.macports-saved_2014-07-19_at_08:03:00
-##
-
-# MacPorts Installer addition on 2014-07-19_at_08:03:00: adding an appropriate PATH variable for use with MacPorts.
-export PATH=/opt/local/bin:/opt/local/sbin:$PATH
-# Finished adapting your PATH environment variable for use with MacPorts.
 
