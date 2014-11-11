@@ -23,6 +23,31 @@ on_exit(){
 
 trap on_exit EXIT
 
+if [ ${ANDY_DIR:="none"} == "none" ]; then
+  echo "Setting a default ANDY_DIR environment variable"
+  export ANDY_DIR=${ANDY_DIR:="${HOME}/workspace/apps/andy/andy-dev"}
+fi
+
+if [ ! -d "${ANDY_DIR}" ]; then
+  echo "ANDY_DIR directory doesn't exist, making now at ${ANDY_DIR}."
+  mkdir -p `dirname ${ANDY_DIR}`
+  pushd `dirname ${ANDY_DIR}`
+  if hash git 2>/dev/null; then
+    echo "Found git, installing Andy from git."
+    git clone https://github.com/aterrel/andy andy-dev
+  elif hash wget 2>/dev/null; then
+    echo "Found wget, installing Andy from tarball"
+    mkdir -p andy-dev
+    wget https://github.com/aterrel/andy/tarball/master --output-document=aterrel-andy-master.tar.gz
+    tar -xzf aterrel-andy-master.tar.gz -C andy-dev
+    mv andy-dev/aterrel-andy-*/* andy-dev/aterrel-andy-*/.[!.]* andy-dev
+    rmdir andy-dev/aterrel-andy-*
+  else
+    echo "Unable to get Andy code, please download from https://github.com/aterrel/andy and set ANDY_DIR to that dir."
+    exit 1
+  fi
+  popd
+fi
 
 source conf.sh
 source toolchain.sh 
