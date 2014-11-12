@@ -3,8 +3,8 @@
 # Adding Brew to path
 export PATH=/usr/local/bin:$PATH
 
-source ${HOME}/.bash_functions
-source ${HOME}/.bash_aliases
+[ -e ${HOME}/.bash_functions ] && source ${HOME}/.bash_functions
+[ -e ${HOME}/.bash_aliases ] && source ${HOME}/.bash_aliases
 
 export CVS_RSH=ssh
 export WORK=$HOME/workspace
@@ -48,4 +48,6 @@ export TODO="t"
 
 # Load Bash It
 source $BASH_IT/bash_it.sh
+
+[ -e ${HOME}/.bash_local ] && source ${HOME}/.bash_local
 

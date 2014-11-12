@@ -1,8 +1,8 @@
 #!/bin/bash
 
-WORK=${HOME}/workspace
-ANDY_INSTALL_DIR=${WORK}/apps
-ANDY_SRC_DIR=${WORK}/src
-ANDY_LOG_DIR=${WORK}/logs
-ANDY_MODULE_DIR=${WORK}/modulefiles
+export WORK=${HOME}/workspace
+export ANDY_INSTALL_DIR=${WORK}/apps
+export ANDY_SRC_DIR=${WORK}/src
+export ANDY_LOG_DIR=${WORK}/logs
+export ANDY_MODULE_DIR=${WORK}/modulefiles
 

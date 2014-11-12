@@ -2,7 +2,6 @@
 
 set -e
 
-
 function on_error() {
   local parent_lineno="$1"
   local message="$2"
@@ -18,7 +17,7 @@ function on_error() {
 trap 'on_error ${LINENO}' ERR
 
 on_exit(){
-    echo "Andy is happy to be of service!"
+    echo "Andy was happy to be of service!"
 }
 
 trap on_exit EXIT
@@ -50,24 +49,24 @@ if [ ! -d "${ANDY_DIR}" ]; then
 fi
 
 source ${ANDY_DIR}/conf.sh
-source ${ANDY_DIR}/toolchain.sh
-source $ANDY_ROOT_DIR/util/functions.sh
-ANDY_LOG_DIR=${ANDY_ROOT_DIR}/logs
-CURR_LOG=${ANDY_LOG_DIR}/current.log
+source ${ANDY_DIR}/util/functions.sh
 
-if [ ! -d `dirname $CURR_LOG` ]; then
-    mkdir `dirname $CURR_LOG`
+ANDY_CURR_LOG=${ANDY_LOG_DIR}/current.log
+
+if [ ! -d `dirname $ANDY_CURR_LOG` ]; then
+    mkdir -p `dirname $ANDY_CURR_LOG`
 fi
 
-exec > >(tee -a $CURR_LOG)
-
-exec 2>&1
-
-echo "[`date`] $@" >> ${ANDY_ROOT_DIR}/logs/current.log
+echo "[`date`] $@" >> ${ANDY_CURR_LOG}
 
 not_implemented() {
     echo  "Not implemented!"
     exit 2
+}
+
+
+bootstrap(){
+    not_implemented
 }
 
 install_package() {
@@ -82,14 +81,28 @@ pass_through() {
     exec $@
 }
 
+print_usage() {
+    echo "Welcome to my menu! Here are a few commands for you to consider on your next visit!"
+    echo "    bootstrap              -> I will set up your user environment according to your preference."
+    echo "    package [package name] -> I will attempt to install a package you have requested."
+    echo "    script [script name]   -> I will attempt to run a script you have requested."
+    echo "    working [message]      -> I will record your working status."
+    echo "    help [command]         -> I will print this message again or more information about a specific command."
+    echo "Any other commands I will attempt to execute directly recording your wish."
+}
+
 if [ $# -eq 0 ]; then
     echo "Welcome sir! How may I be of assistance"
+elif [ $1 == "bootstrap" ]; then
+    bootstrap
 elif [ $1 == "package" ]; then
     install_package $2
 elif [ $1 == "script" ]; then
     install_script $2
 elif [ $1 == "working" ]; then
     :
+elif [ $1 == "help" ]; then
+    print_usage
 else
     pass_through $@
 fi
