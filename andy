@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+set -x
 
 function on_error() {
   local parent_lineno="$1"
@@ -67,11 +68,19 @@ not_implemented() {
 }
 
 bootstrap(){
-    for file in ${ANDY_DIR}/dot_files; do
-        target=${HOME}/.`basename file`
-        [ -d ${target} ] && [ ! ${file} -ef ${target} ] && mv ${target} ${target}_bk
-        ln -s `ls -d -1 ${PWD}/${file}` ${target}
+    echo "Bootstraping user environment from ${ANDY_DIR}"
+    for file in `ls -d ${ANDY_DIR}/dot_files/*`; do
+        target=${HOME}/.`basename ${file}`
+        [ -e ${target} ] && [ ! ${file} -ef ${target} ] && mv ${target} ${target}_bk
+        ln -s -f `ls -d -1 ${file}` ${target}
     done
+    ${ANDY_DIR}/bin/conda_install.sh
+    if [ `uname` == "Linux" ]; then
+        sudo apt-get install -y tmux emacs
+    elif [ `uname` == "Darwin" ]; then
+        ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+        brew install tmux emacs
+    fi
 }
 
 install_package() {
