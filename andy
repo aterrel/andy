@@ -67,6 +67,11 @@ not_implemented() {
     exit 2
 }
 
+install_bashit(){
+    git clone https://github.com/revans/bash-it.git ~/.bash_it
+    ln -sf ${ANDY_DIR}/configs/bash_it/themes/* ~/.bash_it/themes
+}
+
 bootstrap(){
     echo "Bootstraping user environment from ${ANDY_DIR}"
     for file in `ls -d ${ANDY_DIR}/dot_files/*`; do
@@ -76,10 +81,9 @@ bootstrap(){
     done
     ${ANDY_DIR}/bin/conda_install.sh
     if [ `uname` == "Linux" ]; then
-        sudo apt-get install -y tmux emacs
+        sudo ${ANDY_DIR}/bin/ubuntu_install.sh
     elif [ `uname` == "Darwin" ]; then
-        ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-        brew install tmux emacs
+        ${ANDY_DIR}/bin/darwin_install.sh
     fi
 }
 
