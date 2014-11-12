@@ -46,6 +46,8 @@ if [ ! -d "${ANDY_DIR}" ]; then
     exit 1
   fi
   popd
+  echo "export ANDY_DIR=${ANDY_DIR}" >> ${HOME}/.bash_local
+  echo "path_prepend \$\{ANDY_DIR\}" >> ${HOME}/.bash_local
 fi
 
 source ${ANDY_DIR}/conf.sh
@@ -64,9 +66,12 @@ not_implemented() {
     exit 2
 }
 
-
 bootstrap(){
-    not_implemented
+    for file in ${ANDY_DIR}/dot_files; do
+        target=${HOME}/.`basename file`
+        [ -d ${target} ] && [ ! ${file} -ef ${target} ] && mv ${target} ${target}_bk
+        ln -s `ls -d -1 ${PWD}/${file}` ${target}
+    done
 }
 
 install_package() {
