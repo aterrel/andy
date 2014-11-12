@@ -85,6 +85,8 @@ bootstrap(){
     elif [ `uname` == "Darwin" ]; then
         ${ANDY_DIR}/bin/darwin_install.sh
     fi
+
+    install_bashit
 }
 
 install_package() {
