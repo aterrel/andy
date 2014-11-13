@@ -106,10 +106,8 @@ install_package() {
         exit_status=0
         if [ `uname` == "Darwin" ]; then
             brew install $1 || exit_status=1
-            exit_status=${PIPESTATUS[1]}
         elif [ `uname` == "Linux" ]; then
             sudo apt-get install $1 || exit_status=1
-            exit_status=${PIPESTATUS[1]}
         else
             echo "  Oops, I don't know how to use your system installer!"
             exit_status=1
