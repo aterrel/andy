@@ -93,23 +93,26 @@ bootstrap(){
 
 install_package() {
     echo "Trying to install with conda"
-    conda install $1 || true
-    exit_status=${PIPESTATUS[1]}
-    if ${exit_status}; then
+    exit_status=0
+    conda install $1 || exit_status=1
+    if [ ${exit_status} -ne 0 ]; then
         echo "Trying to install with pip"
-        pip install $1 || true
-        exit_status=${PIPESTATUS[1]}
+        exit_status=0
+        pip install $1 || exit_status=1
     fi
-    if ${exit_status}; then
+
+    if [ ${exit_status} -ne 0 ]; then
         echo "Trying to use system installer"
+        exit_status=0
         if [ `uname` == "Darwin" ]; then
-            brew install $1 || true
+            brew install $1 || exit_status=1
             exit_status=${PIPESTATUS[1]}
         elif [ `uname` == "Linux" ]; then
-            sudo apt-get install $1 || true
+            sudo apt-get install $1 || exit_status=1
             exit_status=${PIPESTATUS[1]}
         else
             echo "  Oops, I don't know how to use your system installer!"
+            exit_status=1
         fi
     fi
     exit ${exit_status}
