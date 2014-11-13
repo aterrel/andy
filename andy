@@ -68,8 +68,10 @@ not_implemented() {
 }
 
 install_bashit(){
-    git clone https://github.com/revans/bash-it.git ~/.bash_it
-    ln -sf ${ANDY_DIR}/configs/bash_it/themes/* ~/.bash_it/themes
+    if [ ! -d ${HOME}/.bash_it ]; then
+        git clone https://github.com/revans/bash-it.git ${HOME}/.bash_it
+        ln -sf ${ANDY_DIR}/configs/bash_it/themes/* ${HOME}/.bash_it/themes
+    fi
 }
 
 bootstrap(){
