@@ -90,7 +90,27 @@ bootstrap(){
 }
 
 install_package() {
-    not_implemented
+    echo "Trying to install with conda"
+    conda install $1 || true
+    exit_status=${PIPESTATUS[1]}
+    if ${exit_status}; then
+        echo "Trying to install with pip"
+        pip install $1 || true
+        exit_status=${PIPESTATUS[1]}
+    fi
+    if ${exit_status}; then
+        echo "Trying to use system installer"
+        if [ `uname` == "Darwin" ]; then
+            brew install $1 || true
+            exit_status=${PIPESTATUS[1]}
+        elif [ `uname` == "Linux" ]; then
+            sudo apt-get install $1 || true
+            exit_status=${PIPESTATUS[1]}
+        else
+            echo "  Oops, I don't know how to use your system installer!"
+        fi
+    fi
+    exit ${exit_status}
 }
 
 install_script() {
@@ -104,7 +124,7 @@ pass_through() {
 print_usage() {
     echo "Welcome to my menu! Here are a few commands for you to consider on your next visit!"
     echo "    bootstrap              -> I will set up your user environment according to your preference."
-    echo "    package [package name] -> I will attempt to install a package you have requested."
+    echo "    install [package name] -> I will attempt to install a package you have requested."
     echo "    script [script name]   -> I will attempt to run a script you have requested."
     echo "    working [message]      -> I will record your working status."
     echo "    help [command]         -> I will print this message again or more information about a specific command."
@@ -115,7 +135,7 @@ if [ $# -eq 0 ]; then
     echo "Welcome sir! How may I be of assistance"
 elif [ $1 == "bootstrap" ]; then
     bootstrap
-elif [ $1 == "package" ]; then
+elif [ $1 == "install" ]; then
     install_package $2
 elif [ $1 == "script" ]; then
     install_script $2
