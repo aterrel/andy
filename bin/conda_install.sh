@@ -12,7 +12,7 @@ UNAME=`uname`
 if  ! hash conda 2>/dev/null; then
     mkdir -p `dirname ${MINICONDA_SH}`
     if [ $UNAME == "Linux" ]; then
-        if [ `uname -m` == "x86_64"]; then
+        if [ `uname -m` == "x86_64" ]; then
             wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O ${MINICONDA_SH}
         else
             wget http://repo.continuum.io/miniconda/Miniconda-3.7.0-Linux-x86.sh -O ${MINICONDA_SH}
