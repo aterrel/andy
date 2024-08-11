@@ -1,0 +1,3 @@
+return {
+    'liuchengxu/vista.vim',
+}

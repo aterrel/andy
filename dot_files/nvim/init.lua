@@ -30,5 +30,4 @@ require("lazy").setup({
   checker = { enabled = true },
 })
 
-require("lazy").setup(plugins, opts)
 
